@@ -1,7 +1,8 @@
 package org.bacileus.botroga.modules.ping;
 
-import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+
 import org.bacileus.botroga.modules.GenericProcessor;
 
 public class PingProcessor extends GenericProcessor {
@@ -14,7 +15,7 @@ public class PingProcessor extends GenericProcessor {
     }
 
     @Override
-    public void process(GenericCommandInteractionEvent event) {
+    public void process(SlashCommandInteractionEvent event) {
         if (event.getName().equals(PING_CMD)) {
             event.reply("Pong!").queue();
         }

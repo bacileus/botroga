@@ -1,6 +1,6 @@
 package org.bacileus.botroga.modules;
 
-import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.util.ArrayList;
@@ -17,5 +17,5 @@ public abstract class GenericProcessor {
         return m_supportedCommands;
     }
 
-    public abstract void process(GenericCommandInteractionEvent event);
+    public abstract void process(SlashCommandInteractionEvent event);
 }
