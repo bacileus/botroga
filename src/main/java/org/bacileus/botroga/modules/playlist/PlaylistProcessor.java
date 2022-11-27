@@ -8,15 +8,16 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
-import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import org.bacileus.botroga.constants.Emoji;
 import org.bacileus.botroga.modules.GenericProcessor;
 
 import java.net.URI;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class PlaylistProcessor extends GenericProcessor {
     private static final String PLAY_CMD = "play";
-    private static final String RESOURCE_MEDIA_OPTION = "resource_media";
+    private static final String TRACK_OPTION = "track";
     private static final String SKIP_CMD = "skip";
     private static final String CLEAR_CMD = "clear";
     private final AudioPlayerManager m_audioPlayerManager;
@@ -35,23 +36,30 @@ public class PlaylistProcessor extends GenericProcessor {
         super();
 
         m_supportedCommands.add(Commands.slash(PLAY_CMD, "Reproduces selected track.")
-                .addOption(OptionType.STRING, RESOURCE_MEDIA_OPTION, "URL or keywords to search.", true));
+                .addOption(OptionType.STRING, TRACK_OPTION, "URL or keywords to search.", true));
         m_supportedCommands.add(Commands.slash(SKIP_CMD, "Stops reproducing current track and plays next (if any)."));
         m_supportedCommands.add(Commands.slash(CLEAR_CMD, "Stops reproducing current track and resets playlist."));
 
         m_audioPlayerManager = new DefaultAudioPlayerManager();
+        m_guildMusicManager = new GuildMusicManager(m_audioPlayerManager);
+
         AudioSourceManagers.registerRemoteSources(m_audioPlayerManager);
         AudioSourceManagers.registerLocalSource(m_audioPlayerManager);
-
-        m_guildMusicManager = new GuildMusicManager(m_audioPlayerManager);
     }
 
     @Override
-    public void process(GenericCommandInteractionEvent event) {
+    public void process(SlashCommandInteractionEvent event) {
         switch (event.getName()) {
             case PLAY_CMD -> {
-                event.reply("Processing command...").queue();
-                processPlay((SlashCommandInteractionEvent) event);
+                event.reply(Emoji.MUSICAL_NOTE
+                        + " **Searching** "
+                        + Emoji.MAGNIFYING_GLASS_TILTED_RIGHT
+                        + " "
+                        + event.getOption(TRACK_OPTION).getAsString()
+                        + " "
+                        + Emoji.MAGNIFYING_GLASS_TILTED_RIGHT).queue();
+
+                processPlay(event);
             }
             default -> {
                 // Do nothing
@@ -65,28 +73,46 @@ public class PlaylistProcessor extends GenericProcessor {
             return;
         }
 
-        String resourceMedia = event.getOption(RESOURCE_MEDIA_OPTION).getAsString();
+        String resourceMedia = event.getOption(TRACK_OPTION).getAsString();
         if (!isURL(resourceMedia)) {
             resourceMedia = "ytsearch:" + resourceMedia;
         }
 
-        GuildVoiceState botGuildVoiceState = event.getGuild().getSelfMember().getVoiceState();
+        Guild serverGuild = event.getGuild();
+        GuildVoiceState botGuildVoiceState = serverGuild.getSelfMember().getVoiceState();
+
         if (senderGuildVoiceState.getChannel() != botGuildVoiceState.getChannel()) {
-            AudioManager guildAudioManager = event.getGuild().getAudioManager();
-            VoiceChannel guildVoiceChannel = (VoiceChannel) event.getMember().getVoiceState().getChannel();
+            AudioManager guildAudioManager = serverGuild.getAudioManager();
+            VoiceChannel guildVoiceChannel = (VoiceChannel) senderGuildVoiceState.getChannel();
 
             guildAudioManager.openAudioConnection(guildVoiceChannel);
             guildAudioManager.setSendingHandler(m_guildMusicManager.getM_audioPlayerSendHandler());
         }
 
-        playResource(resourceMedia);
+        playResource((TextChannel) event.getChannel(), resourceMedia);
     }
 
-    private void playResource(String resourceMedia) {
+    private void playResource(TextChannel textChannel, String resourceMedia) {
         m_audioPlayerManager.loadItemOrdered(m_guildMusicManager, resourceMedia, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                m_guildMusicManager.getM_trackScheduler().queue(track);
+                String cmdResponse;
+
+                if (m_guildMusicManager.getM_trackScheduler().addTrack(track)) {
+                    cmdResponse = "**Added to queue **"
+                            + Emoji.CHECK_MARK_BUTTON
+                            + " `"
+                            + track.getInfo().title
+                            + "`";
+                } else {
+                    cmdResponse = "**Going to play **"
+                            + Emoji.RADIO
+                            + " `"
+                            + track.getInfo().title
+                            + "`";
+                }
+
+                textChannel.sendMessage(cmdResponse).queue();
             }
 
             @Override
@@ -94,7 +120,7 @@ public class PlaylistProcessor extends GenericProcessor {
                 List<AudioTrack> trackList = playlist.getTracks();
 
                 if (!trackList.isEmpty()) {
-                    m_guildMusicManager.getM_trackScheduler().queue(trackList.get(0));
+                    m_guildMusicManager.getM_trackScheduler().addTrack(trackList.get(0));
                 } else {
                     noMatches();
                 }
@@ -102,12 +128,19 @@ public class PlaylistProcessor extends GenericProcessor {
 
             @Override
             public void noMatches() {
-
+                textChannel.sendMessage(Emoji.SLIGHTLY_FROWNING_FACE
+                        + " **Song not found** "
+                        + Emoji.SLIGHTLY_FROWNING_FACE).queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-
+                textChannel.sendMessage(Emoji.POLICE_CAR_LIGHT
+                        + " **An exception was raised** "
+                        + Emoji.POLICE_CAR_LIGHT
+                        + " `"
+                        + exception.getMessage()
+                        + " `").queue();
             }
         });
     }
