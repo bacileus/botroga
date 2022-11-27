@@ -17,6 +17,14 @@ public class TrackScheduler extends AudioEventAdapter {
         m_blockingQueue = new ConcurrentLinkedQueue<>();
     }
 
+    public void clear() {
+        if (m_audioPlayer.getPlayingTrack() != null) {
+            m_audioPlayer.stopTrack();
+        }
+
+        m_blockingQueue.clear();
+    }
+
     public boolean addTrack(AudioTrack track) {
         boolean isTrackStarted = m_audioPlayer.startTrack(track, true);
         if (!isTrackStarted) {

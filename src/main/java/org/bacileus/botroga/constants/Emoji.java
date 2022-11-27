@@ -11,4 +11,5 @@ public class Emoji {
     public static final String PROHIBITED = "\uD83D\uDEAB";
     public static final String RADIO = "\uD83D\uDCFB";
     public static final String SLIGHTLY_FROWNING_FACE = "\uD83D\uDE41";
+    public static final String WASTEBASKET = "\uD83D\uDDD1";
 }

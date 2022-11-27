@@ -64,6 +64,12 @@ public class PlaylistProcessor extends GenericProcessor {
 
                 processSkip(event);
             }
+            case CLEAR_CMD -> {
+                event.reply("**Clearing track queue** "
+                        + Emoji.WASTEBASKET).queue();
+
+                processClear(event);
+            }
             default -> {
                 // Do nothing
             }
@@ -114,6 +120,12 @@ public class PlaylistProcessor extends GenericProcessor {
             event.getChannel().sendMessage("**There is nothing to skip!** "
                     + Emoji.PROHIBITED).queue();
         }
+    }
+
+    private void processClear(SlashCommandInteractionEvent event) {
+        m_guildMusicManager.getM_trackScheduler().clear();
+        event.getChannel().sendMessage("**Done** "
+                + Emoji.CHECK_MARK_BUTTON).queue();
     }
 
     private void playResource(TextChannel textChannel, String resourceMedia) {
