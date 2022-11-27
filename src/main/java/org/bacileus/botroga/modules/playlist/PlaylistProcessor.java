@@ -49,6 +49,10 @@ public class PlaylistProcessor extends GenericProcessor {
 
     @Override
     public void process(SlashCommandInteractionEvent event) {
+        if (event.getUser().isBot()) {
+            return;
+        }
+
         switch (event.getName()) {
             case PLAY_CMD -> {
                 event.reply(Emoji.MUSICAL_NOTE
@@ -85,9 +89,6 @@ public class PlaylistProcessor extends GenericProcessor {
                     + Emoji.ENRAGED_FACE).queue();
             return;
         }
-        if (event.getUser().isBot()) {
-            return;
-        }
 
         String resourceMedia = event.getOption(TRACK_OPTION).getAsString();
 
@@ -97,13 +98,16 @@ public class PlaylistProcessor extends GenericProcessor {
 
         Guild serverGuild = event.getGuild();
         GuildVoiceState botGuildVoiceState = serverGuild.getSelfMember().getVoiceState();
+        AudioManager guildAudioManager = serverGuild.getAudioManager();
 
-        if (senderGuildVoiceState.getChannel() != botGuildVoiceState.getChannel()) {
-            AudioManager guildAudioManager = serverGuild.getAudioManager();
+        if (!guildAudioManager.isConnected() || (senderGuildVoiceState.getChannel() != botGuildVoiceState.getChannel())) {
             VoiceChannel guildVoiceChannel = (VoiceChannel) senderGuildVoiceState.getChannel();
 
             guildAudioManager.openAudioConnection(guildVoiceChannel);
-            guildAudioManager.setSendingHandler(m_guildMusicManager.getM_audioPlayerSendHandler());
+
+            if (guildAudioManager.getSendingHandler() == null) {
+                guildAudioManager.setSendingHandler(m_guildMusicManager.getM_audioPlayerSendHandler());
+            }
         }
 
         playResource(textChannel, resourceMedia);
