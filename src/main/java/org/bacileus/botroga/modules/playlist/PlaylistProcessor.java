@@ -53,13 +53,16 @@ public class PlaylistProcessor extends GenericProcessor {
             case PLAY_CMD -> {
                 event.reply(Emoji.MUSICAL_NOTE
                         + " **Searching** "
-                        + Emoji.MAGNIFYING_GLASS_TILTED_RIGHT
-                        + " "
-                        + event.getOption(TRACK_OPTION).getAsString()
-                        + " "
                         + Emoji.MAGNIFYING_GLASS_TILTED_RIGHT).queue();
 
                 processPlay(event);
+            }
+            case SKIP_CMD -> {
+                event.reply(Emoji.FAST_FORWARD_BUTTON
+                        + " **Skipping clip** "
+                        + Emoji.FAST_FORWARD_BUTTON).queue();
+
+                processSkip(event);
             }
             default -> {
                 // Do nothing
@@ -69,11 +72,19 @@ public class PlaylistProcessor extends GenericProcessor {
 
     private void processPlay(SlashCommandInteractionEvent event) {
         GuildVoiceState senderGuildVoiceState = event.getMember().getVoiceState();
-        if (!senderGuildVoiceState.inAudioChannel() || event.getUser().isBot()) {
+        TextChannel textChannel = (TextChannel) event.getChannel();
+
+        if (!senderGuildVoiceState.inAudioChannel()) {
+            textChannel.sendMessage("** You are not in a voice channel!** "
+                    + Emoji.ENRAGED_FACE).queue();
+            return;
+        }
+        if (event.getUser().isBot()) {
             return;
         }
 
         String resourceMedia = event.getOption(TRACK_OPTION).getAsString();
+
         if (!isURL(resourceMedia)) {
             resourceMedia = "ytsearch:" + resourceMedia;
         }
@@ -89,7 +100,20 @@ public class PlaylistProcessor extends GenericProcessor {
             guildAudioManager.setSendingHandler(m_guildMusicManager.getM_audioPlayerSendHandler());
         }
 
-        playResource((TextChannel) event.getChannel(), resourceMedia);
+        playResource(textChannel, resourceMedia);
+    }
+
+    private void processSkip(SlashCommandInteractionEvent event) {
+        if (event.getUser().isBot()) {
+            return;
+        }
+
+        boolean isAudioPlayerPaused = (m_guildMusicManager.getM_audioPlayer().getPlayingTrack() == null);
+
+        if (!m_guildMusicManager.getM_trackScheduler().nextTrack() && isAudioPlayerPaused) {
+            event.getChannel().sendMessage("**There is nothing to skip!** "
+                    + Emoji.PROHIBITED).queue();
+        }
     }
 
     private void playResource(TextChannel textChannel, String resourceMedia) {
@@ -99,19 +123,17 @@ public class PlaylistProcessor extends GenericProcessor {
                 String cmdResponse;
 
                 if (m_guildMusicManager.getM_trackScheduler().addTrack(track)) {
-                    cmdResponse = "**Added to queue **"
-                            + Emoji.CHECK_MARK_BUTTON
-                            + " `"
-                            + track.getInfo().title
-                            + "`";
+                    cmdResponse = "**Added to queue **" + Emoji.CHECK_MARK_BUTTON;
                 } else {
-                    cmdResponse = "**Going to play **"
-                            + Emoji.RADIO
-                            + " `"
-                            + track.getInfo().title
-                            + "`";
+                    cmdResponse = "**Going to play **" + Emoji.RADIO;
                 }
 
+                cmdResponse += " `"
+                        + track.getInfo().title
+                        + "`\n**URL** "
+                        + Emoji.LINK
+                        + " "
+                        + track.getInfo().uri;
                 textChannel.sendMessage(cmdResponse).queue();
             }
 

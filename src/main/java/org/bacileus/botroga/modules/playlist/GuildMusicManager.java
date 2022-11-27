@@ -16,11 +16,15 @@ public class GuildMusicManager {
         m_audioPlayer.addListener(m_trackScheduler);
     }
 
-    public AudioPlayerSendHandler getM_audioPlayerSendHandler() {
-        return m_audioPlayerSendHandler;
+    public AudioPlayer getM_audioPlayer() {
+        return m_audioPlayer;
     }
 
     public TrackScheduler getM_trackScheduler() {
         return m_trackScheduler;
+    }
+
+    public AudioPlayerSendHandler getM_audioPlayerSendHandler() {
+        return m_audioPlayerSendHandler;
     }
 }

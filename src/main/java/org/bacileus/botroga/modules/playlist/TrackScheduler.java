@@ -18,18 +18,22 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public boolean addTrack(AudioTrack track) {
-        if (!m_audioPlayer.startTrack(track, true)) {
+        boolean isTrackStarted = m_audioPlayer.startTrack(track, true);
+        if (!isTrackStarted) {
             m_blockingQueue.add(track);
-            return true;
-        } else {
-            return false;
         }
+
+        return !isTrackStarted;
+    }
+
+    public boolean nextTrack() {
+        return m_audioPlayer.startTrack(m_blockingQueue.poll(), false);
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
-            m_audioPlayer.startTrack(m_blockingQueue.poll(), false);
+            nextTrack();
         }
     }
 }
