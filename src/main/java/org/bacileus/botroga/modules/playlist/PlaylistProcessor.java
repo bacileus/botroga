@@ -47,6 +47,10 @@ public class PlaylistProcessor extends GenericProcessor {
         AudioSourceManagers.registerLocalSource(m_audioPlayerManager);
     }
 
+    public GuildMusicManager getGuildMusicManager() {
+        return m_guildMusicManager;
+    }
+
     @Override
     public void process(SlashCommandInteractionEvent event) {
         if (event.getUser().isBot()) {
@@ -97,16 +101,15 @@ public class PlaylistProcessor extends GenericProcessor {
         }
 
         Guild serverGuild = event.getGuild();
-        GuildVoiceState botGuildVoiceState = serverGuild.getSelfMember().getVoiceState();
         AudioManager guildAudioManager = serverGuild.getAudioManager();
+        GuildVoiceState botGuildVoiceState = serverGuild.getSelfMember().getVoiceState();
+        VoiceChannel guildVoiceChannel = (VoiceChannel) senderGuildVoiceState.getChannel();
 
-        if (!guildAudioManager.isConnected() || (senderGuildVoiceState.getChannel() != botGuildVoiceState.getChannel())) {
-            VoiceChannel guildVoiceChannel = (VoiceChannel) senderGuildVoiceState.getChannel();
-
+        if (!guildAudioManager.isConnected() || (guildVoiceChannel != botGuildVoiceState.getChannel())) {
             guildAudioManager.openAudioConnection(guildVoiceChannel);
 
             if (guildAudioManager.getSendingHandler() == null) {
-                guildAudioManager.setSendingHandler(m_guildMusicManager.getM_audioPlayerSendHandler());
+                guildAudioManager.setSendingHandler(m_guildMusicManager.getAudioPlayerSendHandler());
             }
         }
 
@@ -114,20 +117,16 @@ public class PlaylistProcessor extends GenericProcessor {
     }
 
     private void processSkip(SlashCommandInteractionEvent event) {
-        if (event.getUser().isBot()) {
-            return;
-        }
+        boolean isAudioPlayerPaused = (m_guildMusicManager.getAudioPlayer().getPlayingTrack() == null);
 
-        boolean isAudioPlayerPaused = (m_guildMusicManager.getM_audioPlayer().getPlayingTrack() == null);
-
-        if (!m_guildMusicManager.getM_trackScheduler().nextTrack() && isAudioPlayerPaused) {
+        if (!m_guildMusicManager.getTrackScheduler().nextTrack() && isAudioPlayerPaused) {
             event.getChannel().sendMessage("**There is nothing to skip!** "
                     + Emoji.PROHIBITED).queue();
         }
     }
 
     private void processClear(SlashCommandInteractionEvent event) {
-        m_guildMusicManager.getM_trackScheduler().clear();
+        m_guildMusicManager.getTrackScheduler().clear();
         event.getChannel().sendMessage("**Done** "
                 + Emoji.CHECK_MARK_BUTTON).queue();
     }
@@ -138,7 +137,7 @@ public class PlaylistProcessor extends GenericProcessor {
             public void trackLoaded(AudioTrack track) {
                 String cmdResponse;
 
-                if (m_guildMusicManager.getM_trackScheduler().addTrack(track)) {
+                if (m_guildMusicManager.getTrackScheduler().addTrack(track)) {
                     cmdResponse = "**Added to queue **" + Emoji.CHECK_MARK_BUTTON;
                 } else {
                     cmdResponse = "**Going to play **" + Emoji.RADIO;
@@ -158,7 +157,7 @@ public class PlaylistProcessor extends GenericProcessor {
                 List<AudioTrack> trackList = playlist.getTracks();
 
                 if (!trackList.isEmpty()) {
-                    m_guildMusicManager.getM_trackScheduler().addTrack(trackList.get(0));
+                    trackLoaded(trackList.get(0));
                 } else {
                     noMatches();
                 }

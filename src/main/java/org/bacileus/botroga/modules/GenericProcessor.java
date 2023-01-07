@@ -13,7 +13,7 @@ public abstract class GenericProcessor {
         m_supportedCommands = new ArrayList<>();
     }
 
-    public List<CommandData> getM_supportedCommands() {
+    public List<CommandData> getSupportedCommands() {
         return m_supportedCommands;
     }
 
