@@ -23,7 +23,7 @@ public class GuildMusicManager {
     public GuildMusicManager(AudioPlayerManager audioPlayerManager) {
         m_audioPlayer = audioPlayerManager.createPlayer();
         m_trackScheduler = new TrackScheduler(this);
-        m_audioPlayerSendHandler = new AudioPlayerSendHandler(m_audioPlayer);
+        m_audioPlayerSendHandler = new AudioPlayerSendHandler(this);
         m_scheduledExecutorService = new ScheduledThreadPoolExecutor(NUM_SCHEDULED_THREADS);
 
         m_audioPlayer.addListener(m_trackScheduler);
