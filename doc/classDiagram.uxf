@@ -1,46 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.3.0">
-  <zoom_level>10</zoom_level>
+  <zoom_level>8</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>330</x>
-      <y>330</y>
-      <w>230</w>
-      <h>100</h>
+      <x>136</x>
+      <y>160</y>
+      <w>192</w>
+      <h>104</h>
     </coordinates>
     <panel_attributes>Bot
 --
-jdaBuilder: JDABuilder
+_-TOKEN: String_
+_-CURRENT_GAME: String_
+-m_jdaBuilder: JDABuilder
 --
-main(): void
-addListeners():void
-build():void</panel_attributes>
++main(): void
+-addListeners():void
+-build():void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>650</x>
-      <y>200</y>
-      <w>230</w>
-      <h>80</h>
+      <x>408</x>
+      <y>64</y>
+      <w>192</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>/ListenerAdapter/
 --
-...
 --
-onGuildReady(): void
-onSlashCommandInteraction(): void</panel_attributes>
++onGuildReady(): void
++onSlashCommandInteraction(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>750</x>
-      <y>270</y>
-      <w>30</w>
-      <h>90</h>
+      <x>496</x>
+      <y>112</y>
+      <w>24</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
@@ -48,53 +49,51 @@ onSlashCommandInteraction(): void</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>550</x>
-      <y>370</y>
-      <w>120</w>
-      <h>40</h>
+      <x>320</x>
+      <y>192</y>
+      <w>104</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>650</x>
-      <y>340</y>
-      <w>230</w>
-      <h>80</h>
+      <x>408</x>
+      <y>168</y>
+      <w>192</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>/GenericCmdListener/
 --
-supportedCommands:
-    ArrayList&lt;CommandData&gt;
 --
-onGuildReady(): void</panel_attributes>
++onGuildReady(): void
++onSlashCommandInteraction(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>970</x>
-      <y>300</y>
-      <w>220</w>
-      <h>60</h>
+      <x>672</x>
+      <y>136</y>
+      <w>184</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>PingCmdListener
 --
---
-onSlashCommandInteraction(): void</panel_attributes>
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>160</x>
-      <y>470</y>
-      <w>140</w>
-      <h>50</h>
+      <x>24</x>
+      <y>280</y>
+      <w>112</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=.
 receivers
@@ -104,36 +103,36 @@ domain</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>970</x>
-      <y>400</y>
-      <w>220</w>
-      <h>60</h>
+      <x>672</x>
+      <y>216</y>
+      <w>184</w>
+      <h>40</h>
     </coordinates>
-    <panel_attributes>AudioCmdListener
+    <panel_attributes>PlaylistCmdListener
 --
 --
-onSlashCommandInteraction(): void</panel_attributes>
++onGuildReady(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>750</x>
-      <y>410</y>
-      <w>40</w>
-      <h>160</h>
+      <x>496</x>
+      <y>216</y>
+      <w>32</w>
+      <h>144</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;160.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>870</x>
-      <y>360</y>
-      <w>90</w>
-      <h>40</h>
+      <x>592</x>
+      <y>184</y>
+      <w>72</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
    {D, C}</panel_attributes>
@@ -142,10 +141,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
-      <y>320</y>
-      <w>30</w>
-      <h>130</h>
+      <x>640</x>
+      <y>152</y>
+      <w>24</w>
+      <h>104</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
@@ -153,10 +152,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
-      <y>410</y>
-      <w>60</w>
-      <h>40</h>
+      <x>640</x>
+      <y>224</y>
+      <w>48</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
@@ -164,10 +163,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
-      <y>310</y>
-      <w>60</w>
-      <h>40</h>
+      <x>640</x>
+      <y>144</y>
+      <w>48</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
@@ -175,26 +174,30 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>650</x>
-      <y>550</y>
-      <w>230</w>
-      <h>100</h>
+      <x>408</x>
+      <y>344</y>
+      <w>192</w>
+      <h>112</h>
     </coordinates>
     <panel_attributes>/GenericProcessor/
 --
+#m_supportedCommands:
+    List&lt;CommandData&gt;
 --
-process(
-    GenericCommandInteractionEvent
-    event): void</panel_attributes>
++getSupportedCommands():
+    List&lt;CommandData&gt;
+/+process(/
+/    SlashCommandInteractionEvent/
+/    event): void/</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>750</x>
-      <y>640</y>
-      <w>60</w>
-      <h>90</h>
+      <x>496</x>
+      <y>448</y>
+      <w>48</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 {D, C}
@@ -204,28 +207,288 @@ process(
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>650</x>
-      <y>710</y>
-      <w>230</w>
+      <x>280</x>
+      <y>528</y>
+      <w>192</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>PingProcessor
 --
+_-PING_CMD: String_
 --
-process(
-    GenericCommandInteractionEvent
++process(
+    SlashCommandInteractionEvent
     event): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>270</x>
-      <y>480</y>
-      <w>1070</w>
-      <h>30</h>
+      <x>112</x>
+      <y>288</y>
+      <w>1312</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1050.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1620.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>536</x>
+      <y>528</y>
+      <w>192</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>PlaylistProcessor
+--
+_-PLAY_CMD: String_
+_-TRACK_OPTION: String_
+_-SKIP_CMD: String_
+_-CLEAR_CMD: String_
+-m_audioPlayerManager:
+    AudioPlayerManager
+--
++getGuildMusicManager():
+    GuildMusicManager
++process(
+    SlashCommandInteractionEvent
+    event): void
+-processPlay(
+    SlashCommandInteractionEvent
+    event): void
+-processSkip(
+    SlashCommandInteractionEvent
+    event): void
+-processClear(
+    SlashCommandInteractionEvent
+    event): void
+-playResource(
+    TextChannel textChannel,
+    String resourceMedia): void
+-isURL(String url): boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>824</x>
+      <y>560</y>
+      <w>192</w>
+      <h>248</h>
+    </coordinates>
+    <panel_attributes>GuildMusicManager
+--
+_-NUM_SCHEDULED_THREADS: int_
+_-DISCONNECT_IN_MINUTES: int_
+-m_audioPlayer: AudioPlayer
+-m_scheduledExecutorService:
+    ScheduledExecutorService
+-m_serverGuild: Guild
+-m_disconnectTask:
+    ScheduledFuture&lt;?&gt;
+--
++getAudioPlayer(): AudioPlayer
++getTrackScheduler(): TrackScheduler
++getAudioPlayerSendHandler()
+    :AudioPlayerSendHandler
++setServerGuild(Guild serverGuild)
+    :void
++startAudioDisconnectionScheduler()
+    :void
++stopAudioDisconnectionScheduler()
+    :void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1112</x>
+      <y>400</y>
+      <w>192</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>TrackScheduler
+--
+-m_trackQueue: Queue&lt;AudioTrack&gt;
+--
++clear(): void
++addTrack(AudioTrack track): boolean
++nextTrack(): boolean
++onTrackEnd(AudioPlayer player,
+    AudioTrack track,
+    AudioTrackEndReason endReason)
+    :void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1112</x>
+      <y>576</y>
+      <w>192</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>/AudioEventAdapter/
+--
+--
+/+onTrackEnd(AudioPlayer player,/
+/    AudioTrack track,/
+/    AudioTrackEndReason endReason)/
+/    :void/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1112</x>
+      <y>816</y>
+      <w>192</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>AudioPlayerSendHandler
+--
+_-BYTE_BUFFER_CAPACITY: int_
+-m_byteBuffer: ByteBuffer
+-m_mutableAudioFrame:
+    MutableAudioFrame
+--
++canProvide(): boolean
++provide20MsAudio(): ByteBuffer
++isOpus(): boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1112</x>
+      <y>688</y>
+      <w>192</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+AudioSendHandler
+--
+--
++canProvide(): boolean
++provide20MsAudio(): ByteBuffer
++isOpus(): boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>368</x>
+      <y>496</y>
+      <w>24</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>368</x>
+      <y>488</y>
+      <w>272</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;320.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>496</y>
+      <w>24</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>720</x>
+      <y>672</y>
+      <w>120</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=1
+m2=(1)</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1200</x>
+      <y>520</y>
+      <w>24</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1200</x>
+      <y>760</y>
+      <w>24</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>912</x>
+      <y>864</y>
+      <w>216</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;250.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>912</x>
+      <y>800</y>
+      <w>32</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>912</x>
+      <y>464</y>
+      <w>216</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;250.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>912</x>
+      <y>464</y>
+      <w>32</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
