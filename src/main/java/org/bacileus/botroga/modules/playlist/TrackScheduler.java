@@ -9,33 +9,45 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class TrackScheduler extends AudioEventAdapter {
-    private final AudioPlayer m_audioPlayer;
-    private final Queue<AudioTrack> m_blockingQueue;
+    private final GuildMusicManager m_guildMusicManager;
+    private final Queue<AudioTrack> m_trackQueue;
 
-    public TrackScheduler(AudioPlayer audioPlayer) {
-        m_audioPlayer = audioPlayer;
-        m_blockingQueue = new ConcurrentLinkedQueue<>();
+    public TrackScheduler(GuildMusicManager guildMusicManager) {
+        m_guildMusicManager = guildMusicManager;
+        m_trackQueue = new ConcurrentLinkedQueue<>();
     }
 
     public void clear() {
-        if (m_audioPlayer.getPlayingTrack() != null) {
-            m_audioPlayer.stopTrack();
+        AudioPlayer audioPlayer = m_guildMusicManager.getAudioPlayer();
+
+        if (audioPlayer.getPlayingTrack() != null) {
+            audioPlayer.stopTrack();
         }
 
-        m_blockingQueue.clear();
+        m_trackQueue.clear();
     }
 
     public boolean addTrack(AudioTrack track) {
-        boolean isTrackStarted = m_audioPlayer.startTrack(track, true);
+        m_guildMusicManager.stopAudioDisconnectionScheduler();
+        AudioPlayer audioPlayer = m_guildMusicManager.getAudioPlayer();
+        boolean isTrackStarted = audioPlayer.startTrack(track, true);
+
         if (!isTrackStarted) {
-            m_blockingQueue.add(track);
+            m_trackQueue.add(track);
         }
 
         return !isTrackStarted;
     }
 
     public boolean nextTrack() {
-        return m_audioPlayer.startTrack(m_blockingQueue.poll(), false);
+        AudioPlayer audioPlayer = m_guildMusicManager.getAudioPlayer();
+        boolean isTrackStarted = audioPlayer.startTrack(m_trackQueue.poll(), false);
+
+        if (!isTrackStarted) {
+            m_guildMusicManager.startAudioDisconnectionScheduler();
+        }
+
+        return isTrackStarted;
     }
 
     @Override

@@ -19,7 +19,7 @@ public abstract class GenericCmdListener extends ListenerAdapter {
 
     @Override
     public void onGuildReady(@NotNull GuildReadyEvent event) {
-        for (CommandData supportedCommand : m_cmdProcessor.getM_supportedCommands()) {
+        for (CommandData supportedCommand : m_cmdProcessor.getSupportedCommands()) {
             event.getGuild().upsertCommand(supportedCommand).queue();
         }
     }
